@@ -90,8 +90,38 @@ func (c *SAPAPICaller) AsyncGetCompetitorProduct(competitorProductID string, acc
 ## Output  
 本マイクロサービスでは、[golang-logging-library-for-sap](https://github.com/latonaio/golang-logging-library-for-sap) により、以下のようなデータがJSON形式で出力されます。  
 以下の sample.json の例は、SAP 競合品目 の 競合品目データ が取得された結果の JSON の例です。  
-以下の項目のうち、"ObjectID" ～ "CampaignInboundBusinessTransactionDocumentReference" は、/SAP_API_Output_Formatter/type.go 内 の Type CompetitorProductCollection {} による出力結果です。"cursor" ～ "time"は、golang-logging-library-for-sap による 定型フォーマットの出力結果です。  
+以下の項目のうち、"ObjectID" ～ "ETag" は、/SAP_API_Output_Formatter/type.go 内 の Type CompetitorProductCollection {} による出力結果です。"cursor" ～ "time"は、golang-logging-library-for-sap による 定型フォーマットの出力結果です。  
 
 ```
-XXX
+{
+	"cursor": "/Users/latona2/bitbucket/sap-api-integrations-competitor-product-reads/SAP_API_Caller/caller.go#L53",
+	"function": "sap-api-integrations-competitor-product-reads/SAP_API_Caller.(*SAPAPICaller).CompetitorProductCollection",
+	"level": "INFO",
+	"message": [
+		{
+			"ObjectID": "00163E05A2E01EE4B2FBDC1B545F85E8",
+			"CompetitorProductID": "C100210",
+			"CompetitorProductUUID": "00163E05-A2E0-1EE4-B2FB-DC1B545F85E8",
+			"CompetitorProductName": "Kamba Wheelbarrow",
+			"CompetitorID": "1000005",
+			"ListPrice": "99.000000",
+			"Currency": "USD",
+			"BestSellerIndicator": false,
+			"ProductComparison": "1",
+			"OwnProductID": "P100210",
+			"OwnProductName": "Wheelbarrow",
+			"OwnProductCategoryID": "CUSTOMER-42",
+			"BaseUOM": "EA",
+			"Status": "2",
+			"CreatedBy": "SAP WORKER",
+			"LastChangedBy": "Eddie Smoke",
+			"CreatedOn": "2015-03-16T22:18:04+09:00",
+			"LastChangedOn": "2015-03-16T22:18:04+09:00",
+			"EntityLastChangedOn": "2015-03-16T22:18:04+09:00",
+			"ETag": "2016-07-13T20:41:32+09:00"
+		}
+	],
+	"time": "2022-07-27T11:29:33+09:00"
+}
+
 ```
