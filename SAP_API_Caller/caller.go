@@ -26,14 +26,14 @@ func NewSAPAPICaller(baseUrl string, l *logger.Logger) *SAPAPICaller {
 	}
 }
 
-func (c *SAPAPICaller) AsyncGetCompetitorProduct(competitorProductID string, accepter []string) {
+func (c *SAPAPICaller) AsyncGetCompetitorProduct(objectID, competitorProductID string, accepter []string) {
 	wg := &sync.WaitGroup{}
 	wg.Add(len(accepter))
 	for _, fn := range accepter {
 		switch fn {
 		case "CompetitorProductCollection":
 			func() {
-				c.CompetitorProductCollection(competitorProductID)
+				c.CompetitorProductCollection(objectID, competitorProductID)
 				wg.Done()
 			}()
 		default:
@@ -44,8 +44,8 @@ func (c *SAPAPICaller) AsyncGetCompetitorProduct(competitorProductID string, acc
 	wg.Wait()
 }
 
-func (c *SAPAPICaller) CompetitorProductCollection(competitorProductID string) {
-	data, err := c.callCompetitorProductSrvAPIRequirementCompetitorProductCollection("CompetitorProductCollection", competitorProductID)
+func (c *SAPAPICaller) CompetitorProductCollection(objectID, competitorProductID string) {
+	data, err := c.callCompetitorProductSrvAPIRequirementCompetitorProductCollection("CompetitorProductCollection", objectID, competitorProductID)
 	if err != nil {
 		c.log.Error(err)
 		return
@@ -54,12 +54,12 @@ func (c *SAPAPICaller) CompetitorProductCollection(competitorProductID string) {
 
 }
 
-func (c *SAPAPICaller) callCompetitorProductSrvAPIRequirementCompetitorProductCollection(api, competitorProductID string) ([]sap_api_output_formatter.CompetitorProductCollection, error) {
+func (c *SAPAPICaller) callCompetitorProductSrvAPIRequirementCompetitorProductCollection(api, objectID, competitorProductID string) ([]sap_api_output_formatter.CompetitorProductCollection, error) {
 	url := strings.Join([]string{c.baseURL, "c4codataapi", api}, "/")
 	req, _ := http.NewRequest("GET", url, nil)
 
 	c.setHeaderAPIKeyAccept(req)
-	c.getQueryWithCompetitorProductCollection(req, competitorProductID)
+	c.getQueryWithCompetitorProductCollection(req, objectID, competitorProductID)
 
 	resp, err := new(http.Client).Do(req)
 	if err != nil {
@@ -80,8 +80,8 @@ func (c *SAPAPICaller) setHeaderAPIKeyAccept(req *http.Request) {
 	req.Header.Set("Accept", "application/json")
 }
 
-func (c *SAPAPICaller) getQueryWithCompetitorProductCollection(req *http.Request, competitorProductID string) {
+func (c *SAPAPICaller) getQueryWithCompetitorProductCollection(req *http.Request, objectID, competitorProductID string) {
 	params := req.URL.Query()
-	params.Add("$filter", fmt.Sprintf("CompetitorProductID eq '%s'", competitorProductID))
+	params.Add("$filter", fmt.Sprintf("ObjectID eq '%s' and CompetitorProductID eq '%s'", objectID, competitorProductID))
 	req.URL.RawQuery = params.Encode()
 }
